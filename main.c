@@ -1,16 +1,17 @@
-//https://dev.to/marcbeaujean/practical-introduction-to-vectors-for-game-development-532f
+#include <stdlib.h>
 #include "raylib.h"
 #include "raymath.h"
-#include <stdlib.h>
 
 #define SCALE 0.003
 
+// create player
 typedef struct Player {
 	Vector2 position;
 	Vector2 acceleration;
 	Vector2 velocity;
 } Player;
 
+// create bullet
 typedef struct Bullet {
 	Vector2 position;
 	bool fired;
@@ -21,7 +22,6 @@ typedef struct Bullet {
 } Bullet;
 
 Player initPlayer(void);
-
 void fireToMouse(Bullet*);
 
 int main (void){
@@ -62,7 +62,6 @@ int main (void){
 			player.velocity.x = 0;
 		}
 
-
 		if(IsKeyDown(KEY_D) && player.position.x < screenWidth){
 			if (player.velocity.x < 2){
 				player.velocity.x += player.acceleration.x;
@@ -73,19 +72,18 @@ int main (void){
 			player.velocity.x = 0;
 		}
 
-
 		BeginDrawing();
 
 		ClearBackground(RAYWHITE);
 
-		//bullet
+		// draw bullet
 		if(bullet.fired == true){
 			DrawCircle(bullet.position.x, bullet.position.y, 3, BLUE);
 		}
-		//player
+		// draw player
 		DrawCircle(player.position.x, player.position.y, 10, BLACK);
 		
-		//target
+		//draw target
 		DrawCircle(300,200,30,RED); 
 
 		EndDrawing();
@@ -106,10 +104,9 @@ Player initPlayer(void){
 	return x;
 }
 
+// subtract origin from target (ie mouse)
 void fireToMouse(Bullet* x){
-
 	x->target_vector = Vector2Subtract(GetMousePosition(), x->position);
 	x->target_vector_normalised = Vector2Normalize(x->target_vector);
 	x->scaled = Vector2Scale(x->target_vector_normalised, SCALE);
-
 }
